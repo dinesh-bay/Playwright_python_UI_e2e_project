@@ -471,16 +471,6 @@ Contributions are welcome! Please follow these steps:
 
 ---
 
-## Contact & Support
-
-If you have any questions or need help with the framework:
-
-- **Email**: your.email@example.com
-- **LinkedIn**: [Your LinkedIn Profile](https://linkedin.com/in/yourprofile)
-- **GitHub**: [@yourusername](https://github.com/yourusername)
-
----
-
 ## Author
 
 **Dinesh Gujarathi**
