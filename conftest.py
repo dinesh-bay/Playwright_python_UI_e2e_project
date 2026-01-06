@@ -1,7 +1,21 @@
+import base64
 import pytest
 import allure
+import pytest_html
 from pathlib import Path
 from playwright.sync_api import sync_playwright
+
+
+def _store_screenshot_metadata(node, screenshot_path, test_name):
+    """Cache screenshot path, name, and base64 payload on the request node."""
+    with open(screenshot_path, "rb") as screenshot_file:
+        encoded_image = base64.b64encode(screenshot_file.read()).decode("utf-8")
+
+    node.screenshot_info = {
+        "path": screenshot_path,
+        "name": test_name,
+        "base64": encoded_image,
+    }
 
 # ========================================================================
 # PYTEST + PLAYWRIGHT TEST CONFIGURATION FILE
@@ -10,7 +24,7 @@ from playwright.sync_api import sync_playwright
 # 1. Command-line options (browser, base URL, video, screenshots, etc.)
 # 2. Hooks to track test results
 # 3. Fixtures for browser setup and teardown
-# 4. Screenshot, video, and trace attachments to Allure reports
+# 4. Screenshot, video, and trace attachments to Allure and HTML reports
 # ========================================================================
 
 
@@ -64,6 +78,22 @@ def pytest_runtest_makereport(item, call):
     outcome = yield
     report = outcome.get_result()
     setattr(item, f"rep_{report.when}", report)
+
+    if report.when == "teardown":
+        screenshot_info = getattr(item, "screenshot_info", None)
+        call_report = getattr(item, "rep_call", None)
+
+        if screenshot_info and call_report:
+            extras_list = list(getattr(call_report, "extras", []))
+            extras_list.append(
+                pytest_html.extras.image(
+                    screenshot_info["base64"],
+                    name=f"{screenshot_info['name']}_screenshot",
+                    mime_type="image/png",
+                    extension="png",
+                )
+            )
+            call_report.extras = extras_list
 
 
 # ----------------------------------------------------------------------------
@@ -125,7 +155,7 @@ def page(request, browser_context):
     - Navigates to the base URL
     - Starts tracing (if enabled)
     - Captures screenshots, traces, and videos for failed tests
-    - Attaches all artifacts to Allure report
+    - Attaches all artifacts to Allure and HTML reports
     """
     # Read test configuration
     base_url = get_config_value(request.config, "base_url")
@@ -171,13 +201,18 @@ def page(request, browser_context):
         #     )
         #     print("[ATTACH] Trace attached to Allure report")
 
-    # Take screenshot if test failed
-    if test_failed and screenshot_option in ["on", "only-on-failure"]:
+    # Decide whether to capture a screenshot
+    take_screenshot = (screenshot_option == "on") or (
+        test_failed and screenshot_option == "only-on-failure"
+    )
+
+    if take_screenshot:
         screenshot_path = f"reports/screenshots/{test_name}.png"
         page.screenshot(path=screenshot_path)
         print(f"[SAVE] Screenshot saved: {screenshot_path}")
 
-        # Attach to Allure report
+        _store_screenshot_metadata(request.node, screenshot_path, test_name)
+
         allure.attach.file(
             screenshot_path,
             name=f"{test_name}_screenshot",

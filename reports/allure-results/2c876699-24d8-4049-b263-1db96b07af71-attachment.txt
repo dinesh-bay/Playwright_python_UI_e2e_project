@@ -1,0 +1,10 @@
+[OK] Starting browser: chromium
+[OK] Headless mode: True (headed=False)
+[INFO] Navigating to: https://tutorialsninja.com/demo/
+[TRACE] Tracing enabled - capturing screenshots and actions
+[RESULT] Test 'test_add_product_to_cart' result: [PASS]
+[SAVE] Trace saved: reports/traces/test_add_product_to_cart_trace.zip
+[SAVE] Screenshot saved: reports/screenshots/test_add_product_to_cart.png
+[ATTACH] Screenshot attached to Allure report
+[ATTACH] Screenshot attached to HTML report
+[CLEANUP] Closing browser context and stopping Playwright...
