@@ -483,9 +483,11 @@ If you have any questions or need help with the framework:
 
 ## Author
 
-**Your Name**
+**Dinesh Gujarathi**
 
-Test Automation Engineer with experience in building scalable test frameworks and implementing best practices in quality engineering.
+Test Automation Engineer with experience in building scalable test frameworks with Tricentis Tosca and Playwright and implementing best practices in quality engineering.
+
+For more, here is my LinkedIn - www.linkedin.com/in/dineshgujarathi
 
 ---
 
