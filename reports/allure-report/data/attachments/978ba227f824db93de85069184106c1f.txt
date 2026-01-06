@@ -1,0 +1,13 @@
+[OK] Starting browser: chromium
+[OK] Headless mode: True (headed=False)
+[INFO] Navigating to: https://tutorialsninja.com/demo/
+[TRACE] Tracing enabled - capturing screenshots and actions
+Registration completed successfully!
+Logout completed successfully!
+Login completed successfully!
+[RESULT] Test 'test_end_to_end_flow' result: [FAIL]
+[SAVE] Trace saved: reports/traces/test_end_to_end_flow_trace.zip
+[SAVE] Screenshot saved: reports/screenshots/test_end_to_end_flow.png
+[ATTACH] Screenshot attached to Allure report
+[ATTACH] Video attached to Allure report
+[CLEANUP] Closing browser context and stopping Playwright...
